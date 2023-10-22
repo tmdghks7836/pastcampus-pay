@@ -4,21 +4,21 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-@Getter
+
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Membership {
 
-    private final String membershipId;
+    @Getter private final String membershipId;
 
-    private final String name;
+    @Getter private final String name;
 
-    private final String email;
+    @Getter  private final String email;
 
-    private final String address;
+    @Getter private final String address;
 
-    private final boolean isValid;
+    @Getter  private final boolean isValid;
 
-    private final boolean isCorp;
+    @Getter  private final boolean isCorp;
 
     public static Membership generateMember(MembershipId membershipId,
                                             MembershipName membershipName,
@@ -39,6 +39,7 @@ public class Membership {
 
     // member 정의
     // 오염이 되면 안되는 클래스, 고객정보, 핵심 도메인
+    @Getter
     public static class MembershipId{
 
         public MembershipId(String value){
@@ -48,6 +49,7 @@ public class Membership {
         String membershipId;
     }
 
+    @Getter
     public static class MembershipName{
 
         public MembershipName(String value){
@@ -57,6 +59,7 @@ public class Membership {
         String membershipName;
     }
 
+    @Getter
     public static class MembershipEmail{
 
         public MembershipEmail(String value){
@@ -66,6 +69,7 @@ public class Membership {
         String membershipEmail;
     }
 
+    @Getter
     public static class MembershipAddress{
 
         public MembershipAddress(String value){
@@ -75,6 +79,7 @@ public class Membership {
         String membershipAddress;
     }
 
+    @Getter
     public static class MembershipIsValid{
 
         public MembershipIsValid(boolean value){
@@ -84,6 +89,7 @@ public class Membership {
         boolean membershipIsValid;
     }
 
+    @Getter
     public static class MembershipIsCorp{
 
         public MembershipIsCorp(boolean value){
