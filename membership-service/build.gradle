@@ -1,29 +1,3 @@
-buildscript {
-    dependencies {
-        classpath "io.spring.gradle:dependency-management-plugin:0.5.1.RELEASE"
-    }
-}
-
-plugins {
-    id 'org.springframework.boot'
-    id 'java'
-}
-
-compileJava {
-    sourceCompatibility = 11
-    targetCompatibility = 11
-}
-apply plugin: 'java'
-apply plugin: 'java-library'
-apply plugin: 'org.springframework.boot'
-apply plugin: 'io.spring.dependency-management'
-
-group 'com.fastcampus.membership'
-version '1.0-SNAPSHOT'
-
-repositories {
-    mavenCentral()
-}
 
 dependencies {
     compileOnly 'org.projectlombok:lombok'
@@ -45,4 +19,7 @@ dependencies {
     testImplementation 'junit:junit:4.13.1'
 
     runtimeOnly 'com.h2database:h2'
+
+    /** common module */
+    implementation project(':common')
 }

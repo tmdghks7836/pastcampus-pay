@@ -7,13 +7,17 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegisterMembershipRequest {
+public class ModifyMembershipRequest {
 
-
+    private String membershipId;
 
     private String name;
-    private String email;
-    private String address;
-    private boolean isCorp;
 
+    private String address;
+
+    private String email;
+
+    private boolean isValid;
+
+    private boolean isCorp;
 }

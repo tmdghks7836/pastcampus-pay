@@ -4,9 +4,11 @@ import com.fastcampuspay.membership.application.port.in.FindMembershipCommand;
 import com.fastcampuspay.membership.application.port.in.FindMembershipUseCase;
 import com.fastcampuspay.membership.domain.Membership;
 import lombok.RequiredArgsConstructor;
+import org.fastcampuspay.common.WebAdapter;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+@WebAdapter
 @RequiredArgsConstructor
 @RestController
 public class FindMembershipController {

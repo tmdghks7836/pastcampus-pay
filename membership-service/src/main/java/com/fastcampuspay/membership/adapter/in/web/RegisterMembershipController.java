@@ -4,11 +4,12 @@ import com.fastcampuspay.membership.application.port.in.RegisterMembershipComman
 import com.fastcampuspay.membership.application.port.in.RegisterMembershipUseCase;
 import com.fastcampuspay.membership.domain.Membership;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.fastcampuspay.common.WebAdapter;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+@WebAdapter
 @RestController
 @RequiredArgsConstructor
 public class RegisterMembershipController {
