@@ -1,29 +1,10 @@
-buildscript {
-    dependencies {
-        classpath "io.spring.gradle:dependency-management-plugin:0.5.1.RELEASE"
-    }
+plugins{
+    id 'com.palantir.docker' version '0.25.0'
+    id 'com.google.cloud.tools.jib' version '3.1.2'
 }
 
-plugins {
-    id 'org.springframework.boot'
-    id 'java'
-}
-
-compileJava {
-    sourceCompatibility = 11
-    targetCompatibility = 11
-}
-apply plugin: 'java'
-apply plugin: 'java-library'
-apply plugin: 'org.springframework.boot'
-apply plugin: 'io.spring.dependency-management'
-
-group 'com.fastcampus.membership'
-version '1.0-SNAPSHOT'
-
-repositories {
-    mavenCentral()
-}
+group = 'com.fastcampuspay.membership'
+version = '1.0.1'
 
 dependencies {
     compileOnly 'org.projectlombok:lombok'
@@ -44,5 +25,37 @@ dependencies {
     implementation 'org.jetbrains:annotations:23.0.0'
     testImplementation 'junit:junit:4.13.1'
 
+
+
     runtimeOnly 'com.h2database:h2'
+
+    /** common module */
+    implementation project(':common')
+}
+
+
+docker {
+    //이미지 이름
+    name rootProject.name + '-' + project.name  + ":"+ project.version
+    //어떤 Dockerfile
+    dockerfile file('..\\Dockerfile')
+    //어떤 파일들을 Dockerfile 에 복사할 것인가
+    files tasks.bootJar.outputs.files
+    //Dockerfile 에 전달할 인자
+    buildArgs(['JAR_FILE': tasks.bootJar.outputs.files.singleFile.name])
+}
+
+
+jib {
+
+    from {
+        image = 'adoptopenjdk/openjdk11'
+    }
+    to {
+        image = 'tmdghks0021/' + rootProject.name + '-' + project.name
+        tags = [project.version]
+    }
+    container {
+        ports = ["8080"]
+    }
 }

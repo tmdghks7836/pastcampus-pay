@@ -29,11 +29,11 @@ public class Membership {
 
         return new Membership(
                 membershipId.membershipId,
-                membershipName.membershipName,
-                membershipEmail.membershipEmail,
-                membershipAddress.membershipAddress,
-                membershipIsValid.membershipIsValid,
-                membershipIsCorp.membershipIsCorp);
+                membershipName.nameValue,
+                membershipEmail.emailValue,
+                membershipAddress.addressValue,
+                membershipIsValid.isValidValue,
+                membershipIsCorp.isCorpValue);
     }
 
 
@@ -53,49 +53,49 @@ public class Membership {
     public static class MembershipName{
 
         public MembershipName(String value){
-            this.membershipName = value;
+            this.nameValue = value;
         }
 
-        String membershipName;
+        String nameValue;
     }
 
     @Getter
     public static class MembershipEmail{
 
         public MembershipEmail(String value){
-            this.membershipEmail = value;
+            this.emailValue = value;
         }
 
-        String membershipEmail;
+        String emailValue;
     }
 
     @Getter
     public static class MembershipAddress{
 
         public MembershipAddress(String value){
-            this.membershipAddress = value;
+            this.addressValue = value;
         }
 
-        String membershipAddress;
+        String addressValue;
     }
 
     @Getter
     public static class MembershipIsValid{
 
         public MembershipIsValid(boolean value){
-            this.membershipIsValid = value;
+            this.isValidValue = value;
         }
 
-        boolean membershipIsValid;
+        boolean isValidValue;
     }
 
     @Getter
     public static class MembershipIsCorp{
 
         public MembershipIsCorp(boolean value){
-            this.membershipIsCorp = value;
+            this.isCorpValue = value;
         }
 
-        boolean membershipIsCorp;
+        boolean isCorpValue;
     }
 }
