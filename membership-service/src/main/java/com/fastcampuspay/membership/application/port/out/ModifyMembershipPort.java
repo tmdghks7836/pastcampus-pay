@@ -6,6 +6,7 @@ import com.fastcampuspay.membership.domain.Membership;
 public interface ModifyMembershipPort {
 
     MemberShipJpaEntity modifyMembership(
+
             Membership.MembershipId membershipId,
             Membership.MembershipName membershipName,
             Membership.MembershipEmail membershipEmail,
