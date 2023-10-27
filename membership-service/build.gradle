@@ -4,7 +4,7 @@ plugins{
 }
 
 group = 'com.fastcampuspay.membership'
-version = '1.0.1'
+version = '1.0.2'
 
 dependencies {
     compileOnly 'org.projectlombok:lombok'
@@ -27,7 +27,9 @@ dependencies {
 
 
 
-    runtimeOnly 'com.h2database:h2'
+    //runtimeOnly 'com.h2database:h2'
+
+    runtimeOnly 'mysql:mysql-connector-java'
 
     /** common module */
     implementation project(':common')
