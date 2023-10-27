@@ -4,7 +4,7 @@ plugins{
 }
 
 group = 'com.fastcampuspay.membership'
-version = '1.0.3'
+version = '1.0.4'
 
 dependencies {
     compileOnly 'org.projectlombok:lombok'
