@@ -14,7 +14,6 @@ buildscript {
 
 subprojects {
 
-
     apply plugin: 'java'
     apply plugin: 'java-library'
     apply plugin: 'idea'
@@ -43,7 +42,6 @@ subprojects {
     }
 }
 
-/*
 project(':common') {
     // 공통 코드
     bootJar { enabled = false } // core 은 bootJar 로 패키징 할 필요 없음
@@ -52,4 +50,3 @@ project(':common') {
 
 }
 
-*/
