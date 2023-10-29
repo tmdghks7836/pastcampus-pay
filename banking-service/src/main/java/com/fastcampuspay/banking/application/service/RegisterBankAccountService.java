@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 @UseCase
 @RequiredArgsConstructor
 @Transactional
-public class RegisterMembershipService implements RegisterBankAccountUseCase {
+public class RegisterBankAccountService implements RegisterBankAccountUseCase {
 
     private final RegisterBankAccountPort registerMembershipPort;
     private final RegisteredBankAccountMapper mapper;
@@ -37,8 +37,6 @@ public class RegisterMembershipService implements RegisterBankAccountUseCase {
          *
          *
          * */
-
-
         GetBankAccountRequest request = GetBankAccountRequest
                 .builder()
                 .bankAccountNumber(command.getBankAccountNumber())

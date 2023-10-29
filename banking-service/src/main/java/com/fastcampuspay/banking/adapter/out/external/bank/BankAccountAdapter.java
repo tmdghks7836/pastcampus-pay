@@ -1,13 +1,19 @@
 package com.fastcampuspay.banking.adapter.out.external.bank;
 
 import com.fastcampuspay.banking.application.port.out.RequestBankAccountInfoPort;
+import com.fastcampuspay.banking.application.port.out.RequestExternalFirmbankingPort;
 import lombok.RequiredArgsConstructor;
 import org.fastcampuspay.common.ExternalSystemAdapter;
 
 @ExternalSystemAdapter
 @RequiredArgsConstructor
-public class BankAccountAccountAdapter implements RequestBankAccountInfoPort {
+public class BankAccountAdapter implements RequestBankAccountInfoPort, RequestExternalFirmbankingPort {
 
+    @Override
+    public FirmbankingResult requestExternalFirmbanking(ExternalFirmbankingRequest externalFirmbankingRequest) {
+
+       return new FirmbankingResult(0);
+    }
 
     @Override
     public BankAccount getBankAccountInfo(GetBankAccountRequest request) {
