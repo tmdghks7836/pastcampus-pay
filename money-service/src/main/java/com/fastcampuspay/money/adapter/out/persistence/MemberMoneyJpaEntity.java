@@ -4,7 +4,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 
 @Entity
 @Table(name = "member_money")
@@ -16,12 +15,12 @@ public class MemberMoneyJpaEntity {
     @GeneratedValue
     private Long memberMoneyId;
 
-    private String memberId;
+    private Long membershipId;
 
     private int balance;
 
-    public MemberMoneyJpaEntity(String memberId, int balance) {
-        this.memberId = memberId;
+    public MemberMoneyJpaEntity(Long membershipId, int balance) {
+        this.membershipId = membershipId;
         this.balance = balance;
     }
 

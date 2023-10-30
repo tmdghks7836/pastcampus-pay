@@ -21,11 +21,14 @@ public class MoneyChangingRequestPersistenceAdapter implements IncreaseMoneyPort
     private final SpringDataMemberMoneyRepository memberMoneyRepository;
 
     @Override
-    public MemberMoneyJpaEntity increaseMoney(MemberMoney.MembershipId memberId, int increaseMoneyAmount) {
+    public MemberMoneyJpaEntity increaseMoney(MemberMoney.MembershipId membershipId, int increaseMoneyAmount) {
+
+        long membershipIdLong = Long.parseLong(membershipId.getValue());
+
 
         MemberMoneyJpaEntity memberMoneyJpaEntity = memberMoneyRepository
-                .findById(Long.parseLong(memberId.getValue()))
-                .orElseGet(() -> createMemberMoney(memberId));
+                .findByMembershipId(membershipIdLong)
+                .orElseGet(() -> createMemberMoney(membershipIdLong));
 
         memberMoneyJpaEntity.increaseMoney(increaseMoneyAmount);
 
@@ -33,10 +36,10 @@ public class MoneyChangingRequestPersistenceAdapter implements IncreaseMoneyPort
     }
 
     @NotNull
-    private MemberMoneyJpaEntity createMemberMoney(MemberMoney.MembershipId memberId) {
+    private MemberMoneyJpaEntity createMemberMoney(Long membershipId) {
         return memberMoneyRepository.save(
                 new MemberMoneyJpaEntity(
-                        memberId.getValue(),
+                        membershipId,
                         0
                 ));
     }
