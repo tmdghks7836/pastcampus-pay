@@ -32,7 +32,7 @@ public class FirmbankingRequestJpaEntity {
 
     private Integer firmbankingStatus; // 0: request 1: success 2: failed
 
-    private UUID uuid;
+    private String uuid;
 
     public FirmbankingRequestJpaEntity(String fromBankName, String fromBankAccountNumber, String toBankName, String toBankAccountNumber, Integer moneyAmount, Integer firmbankingStatus, UUID uuid) {
         this.fromBankName = fromBankName;
@@ -41,6 +41,6 @@ public class FirmbankingRequestJpaEntity {
         this.toBankAccountNumber = toBankAccountNumber;
         this.moneyAmount = moneyAmount;
         this.firmbankingStatus = firmbankingStatus;
-        this.uuid = uuid;
+        this.uuid = uuid.toString();
     }
 }
