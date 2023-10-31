@@ -8,6 +8,7 @@ buildscript {
     dependencies {
         classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
         classpath "io.spring.gradle:dependency-management-plugin:0.5.1.RELEASE"
+
     }
 
 }
@@ -33,8 +34,12 @@ subprojects {
         annotationProcessor 'org.projectlombok:lombok'
         annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 
+        implementation 'org.springframework.boot:spring-boot-starter-aop'
+        implementation 'org.springframework.kafka:spring-kafka'
+
         testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
         testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+
     }
 
     test {

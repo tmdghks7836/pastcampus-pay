@@ -2,11 +2,10 @@ package com.fastcampuspay.banking.adapter.out.external.bank;
 
 import com.fastcampuspay.banking.adapter.out.persistence.FirmbankingRequestJpaEntity;
 import com.fastcampuspay.banking.adapter.out.persistence.SpringDataFirmbankingRequestRepository;
-import com.fastcampuspay.banking.application.port.out.RequestBankAccountInfoPort;
 import com.fastcampuspay.banking.application.port.out.RequestFirmbankingPort;
 import com.fastcampuspay.banking.domain.FirmbankingRequest;
 import lombok.RequiredArgsConstructor;
-import org.fastcampuspay.common.ExternalSystemAdapter;
+import com.fastcampuspay.common.ExternalSystemAdapter;
 
 import java.util.UUID;
 

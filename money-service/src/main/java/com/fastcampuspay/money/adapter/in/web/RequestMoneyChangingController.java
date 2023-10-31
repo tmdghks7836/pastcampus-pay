@@ -4,7 +4,7 @@ import com.fastcampuspay.money.application.port.in.IncreaseMoneyRequestCommand;
 import com.fastcampuspay.money.application.port.in.IncreaseMoneyRequestUseCase;
 import com.fastcampuspay.money.domain.MoneyChangingRequest;
 import lombok.RequiredArgsConstructor;
-import org.fastcampuspay.common.WebAdapter;
+import com.fastcampuspay.common.WebAdapter;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;

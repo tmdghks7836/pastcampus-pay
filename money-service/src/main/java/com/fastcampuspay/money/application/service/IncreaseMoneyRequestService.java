@@ -1,7 +1,6 @@
 package com.fastcampuspay.money.application.service;
 
 import com.fastcampuspay.money.adapter.out.persistence.MemberMoneyJpaEntity;
-import com.fastcampuspay.money.adapter.out.persistence.MoneyChangingRequestJpaEntity;
 import com.fastcampuspay.money.adapter.out.persistence.MoneyChangingRequestMapper;
 import com.fastcampuspay.money.application.port.in.IncreaseMoneyRequestCommand;
 import com.fastcampuspay.money.application.port.in.IncreaseMoneyRequestUseCase;
@@ -9,8 +8,7 @@ import com.fastcampuspay.money.application.port.out.IncreaseMoneyPort;
 import com.fastcampuspay.money.domain.MemberMoney;
 import com.fastcampuspay.money.domain.MoneyChangingRequest;
 import lombok.RequiredArgsConstructor;
-import org.fastcampuspay.common.UseCase;
-import org.springframework.aop.scope.ScopedObject;
+import com.fastcampuspay.common.UseCase;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;

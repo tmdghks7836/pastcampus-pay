@@ -4,7 +4,7 @@ import com.fastcampuspay.banking.application.port.in.RegisterBankAccountCommand;
 import com.fastcampuspay.banking.application.port.in.RegisterBankAccountUseCase;
 import com.fastcampuspay.banking.domain.RegisteredBankAccount;
 import lombok.RequiredArgsConstructor;
-import org.fastcampuspay.common.WebAdapter;
+import com.fastcampuspay.common.WebAdapter;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;

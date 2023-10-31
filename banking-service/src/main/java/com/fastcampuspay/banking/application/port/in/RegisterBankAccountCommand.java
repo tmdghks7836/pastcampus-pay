@@ -3,11 +3,8 @@ package com.fastcampuspay.banking.application.port.in;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import org.fastcampuspay.common.SelfValidating;
+import com.fastcampuspay.common.SelfValidating;
 
-import javax.validation.constraints.AssertTrue;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 /**

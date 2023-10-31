@@ -10,7 +10,7 @@ import com.fastcampuspay.banking.application.port.out.RegisterBankAccountPort;
 import com.fastcampuspay.banking.application.port.out.RequestBankAccountInfoPort;
 import com.fastcampuspay.banking.domain.RegisteredBankAccount;
 import lombok.RequiredArgsConstructor;
-import org.fastcampuspay.common.UseCase;
+import com.fastcampuspay.common.UseCase;
 import org.springframework.transaction.annotation.Transactional;
 
 @UseCase

@@ -1,6 +1,5 @@
 package com.fastcampuspay.banking.application.service;
 
-import com.fastcampuspay.banking.adapter.in.web.FirmbankingRequestRequest;
 import com.fastcampuspay.banking.adapter.out.external.bank.ExternalFirmbankingRequest;
 import com.fastcampuspay.banking.adapter.out.external.bank.FirmbankingResult;
 import com.fastcampuspay.banking.adapter.out.persistence.FirmbankingRequestJpaEntity;
@@ -11,7 +10,7 @@ import com.fastcampuspay.banking.application.port.out.RequestExternalFirmbanking
 import com.fastcampuspay.banking.application.port.out.RequestFirmbankingPort;
 import com.fastcampuspay.banking.domain.FirmbankingRequest;
 import lombok.RequiredArgsConstructor;
-import org.fastcampuspay.common.UseCase;
+import com.fastcampuspay.common.UseCase;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
