@@ -40,26 +40,26 @@ public class RequestMoneyChangingController {
         return resultDetail;
     }
 
-    @PostMapping("/money/decrease")
-    MoneyChangingResultDetail decreaseMoneyChangingRequest(@RequestBody DecreaseMoneyChangingRequest request){
+    @PostMapping("/money/increase-async")
+    MoneyChangingResultDetail increaseMoneyChangingRequestAsync(@RequestBody IncreaseMoneyChangingRequest request){
 
         // request -> command
         //Usecase
-      /*  RegisterBankAccountCommand command = RegisterBankAccountCommand.builder()
-                .membershipId(request.getTargetMembershipId())
-                .bankAccountNumber(request.getBankAccountNumber())
-                .moneyChangingType(request.getBankName())
-                .linkedStatusIsValid(request.isLinkedStatusIsValid())
-                .build();*/
+        IncreaseMoneyRequestCommand command = IncreaseMoneyRequestCommand.builder()
+                .targetMembershipId(request.getTargetMembershipId())
+                .amount(request.getAmount())
+                .build();
 
-       /* MoneyChangingRequest moneyChangingRequest = increaseMoneyRequestUseCase.increaseMoneyRequest(command);
+        MoneyChangingRequest moneyChangingRequest = increaseMoneyRequestUseCase.increaseMoneyRequestAsync(command);
 
-        if(moneyChangingRequest == null){
-            return null;
-        }
+        MoneyChangingResultDetail resultDetail = new MoneyChangingResultDetail(
+                moneyChangingRequest.getMoneyChangingRequestId(),
+                0,0,
+                moneyChangingRequest.getChangingMoneyAmount()
+        );
 
-        return moneyChangingRequest;*/
-        return null;
+
+        return resultDetail;
     }
 
 }

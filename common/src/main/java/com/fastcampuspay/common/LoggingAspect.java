@@ -22,4 +22,5 @@ public class LoggingAspect {
 
         loggingProducer.sendMessage("logging", "Before executing method: " + methodName);
     }
+
 }

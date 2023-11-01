@@ -1,0 +1,14 @@
+#spring:
+#
+#  datasource:
+#    driver-class-name: com.mysql.jdbc.Driver
+#  jpa:
+#    hibernate:
+#      ddl-auto: create-drop
+kafka:
+  clusters:
+    bootstrapservers: localhost:29092
+task:
+  topic: fastcampus.task.topic
+  result:
+    topic: fastcampus.task.result.topic

@@ -7,5 +7,5 @@ import com.fastcampuspay.banking.domain.RegisteredBankAccount;
 
 public interface RegisterBankAccountUseCase {
 
-    RegisteredBankAccount register(RegisterBankAccountCommand command);
+    RegisteredBankAccount registerBankAccount(RegisterBankAccountCommand command);
 }

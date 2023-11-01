@@ -29,7 +29,7 @@ public class RegisterBankAccountController {
                 .linkedStatusIsValid(request.isLinkedStatusIsValid())
                 .build();
 
-        RegisteredBankAccount registeredBankAccount = registerBankAccountUseCase.register(command);
+        RegisteredBankAccount registeredBankAccount = registerBankAccountUseCase.registerBankAccount(command);
 
         if(registeredBankAccount == null){
             return null;

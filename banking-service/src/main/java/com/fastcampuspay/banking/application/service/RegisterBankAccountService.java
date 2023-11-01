@@ -6,6 +6,8 @@ import com.fastcampuspay.banking.adapter.out.persistence.RegisteredBankAccountJp
 import com.fastcampuspay.banking.adapter.out.persistence.RegisteredBankAccountMapper;
 import com.fastcampuspay.banking.application.port.in.RegisterBankAccountCommand;
 import com.fastcampuspay.banking.application.port.in.RegisterBankAccountUseCase;
+import com.fastcampuspay.banking.application.port.out.GetMembershipPort;
+import com.fastcampuspay.banking.application.port.out.MembershipStatus;
 import com.fastcampuspay.banking.application.port.out.RegisterBankAccountPort;
 import com.fastcampuspay.banking.application.port.out.RequestBankAccountInfoPort;
 import com.fastcampuspay.banking.domain.RegisteredBankAccount;
@@ -21,9 +23,9 @@ public class RegisterBankAccountService implements RegisterBankAccountUseCase {
     private final RegisterBankAccountPort registerMembershipPort;
     private final RegisteredBankAccountMapper mapper;
     private final RequestBankAccountInfoPort requestBankAccountInfoPort;
-
+    private final GetMembershipPort getMembershipPort;
     @Override
-    public RegisteredBankAccount register(RegisterBankAccountCommand command) {
+    public RegisteredBankAccount registerBankAccount(RegisterBankAccountCommand command) {
 
 
         /**은행 계좌 등록 로직
@@ -31,8 +33,13 @@ public class RegisterBankAccountService implements RegisterBankAccountUseCase {
          * //1. 등록된 계좌인지 확인
          * 1. 외부 실제 은행에 등록이 가능한 계좌인지 확인  External System
          * port -> adapter -> external
-         *
-         * 2. 등록 가능한 계좌라면, 등록
+         */
+        MembershipStatus membership = getMembershipPort.getMembership(command.getMembershipId());
+        if(!membership.isValid()){
+            return null;
+        }
+
+         /* 2. 등록 가능한 계좌라면, 등록
          * 2-1. 등록 가능하지 않은 계좌라면 에러를 리턴
          *
          *

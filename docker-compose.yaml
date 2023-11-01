@@ -17,6 +17,7 @@ services:
       - fastcampuspay_network
     ports:
       - '9092:9092'
+      - '29092:29092'
     environment:
       - BITNAMI_DEBUG=true
       - KAFKA_BROKER_ID=1
@@ -109,9 +110,10 @@ services:
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
       - KAFKA_CLUSTERS_BOOTSTRAPSERVERS=kafka:29092
       - LOGGING_TOPIC=fastcampus.logging.out.stdout
+      - SERVICE_MEMBERSHIP_URL=http://membership-service:8080
 
   money-service:
-    image: myfastcampuspay-money-service:0.0.1
+    image: myfastcampuspay-money-service:0.0.2
     networks:
       - fastcampuspay_network
     ports:
@@ -131,6 +133,9 @@ services:
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
       - KAFKA_CLUSTERS_BOOTSTRAPSERVERS=kafka:29092
       - LOGGING_TOPIC=fastcampus.logging.out.stdout
+      - TASK_TOPIC=fastcampus.task.topic
+      - TASK_RESULT_TOPIC=fastcampus.task.result.topic
+      - SERVICE_MEMBERSHIP_URL=http://membership-service:8080
 
   logging-consumer:
     image: myfastcampuspay-logging-consumer:0.0.1
@@ -143,7 +148,17 @@ services:
       - KAFKA_CLUSTERS_BOOTSTRAPSERVERS=kafka:29092
       - LOGGING_TOPIC=fastcampus.logging.out.stdout
 
-
+  task-consumer:
+    image: myfastcampuspay-task-consumer:0.0.1
+    networks:
+      - fastcampuspay_network
+    depends_on:
+      - kafka
+      - zookeeper
+    environment:
+      - KAFKA_CLUSTERS_BOOTSTRAPSERVERS=kafka:29092
+      - TASK_TOPIC=fastcampus.task.topic
+      - TASK_RESULT_TOPIC=fastcampus.task.result.topic
 
 
 
