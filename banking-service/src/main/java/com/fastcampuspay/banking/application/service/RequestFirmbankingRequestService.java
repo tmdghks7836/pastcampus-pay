@@ -1,5 +1,6 @@
 package com.fastcampuspay.banking.application.service;
 
+import com.fastcampuspay.banking.adapter.axon.command.CreateFirmbankingRequestCommand;
 import com.fastcampuspay.banking.adapter.out.external.bank.ExternalFirmbankingRequest;
 import com.fastcampuspay.banking.adapter.out.external.bank.FirmbankingResult;
 import com.fastcampuspay.banking.adapter.out.persistence.FirmbankingRequestJpaEntity;
@@ -11,6 +12,7 @@ import com.fastcampuspay.banking.application.port.out.RequestFirmbankingPort;
 import com.fastcampuspay.banking.domain.FirmbankingRequest;
 import lombok.RequiredArgsConstructor;
 import com.fastcampuspay.common.UseCase;
+import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
@@ -25,6 +27,8 @@ public class RequestFirmbankingRequestService implements RequestFirmbankingReque
     private final FirmbankingRequestMapper mapper;
 
     private final RequestExternalFirmbankingPort requestExternalFirmbankingPort;
+
+    private final CommandGateway commandGateway;
 
     @Override
     public FirmbankingRequest requestFirmbanking(RequestFirmbankingRequestCommand command) {
@@ -59,6 +63,37 @@ public class RequestFirmbankingRequestService implements RequestFirmbankingReque
          requestFirmbankingPort.modify(entity);
 
         return mapper.mapToDomainEntity(entity, uuid);
+
+    }
+
+    @Override
+    public void requestFirmbankingByEvent(RequestFirmbankingRequestCommand command) {
+
+        CreateFirmbankingRequestCommand axonCommand = CreateFirmbankingRequestCommand.builder()
+                .fromBankAccountNumber(command.getFromBankAccountNumber())
+                .fromBankName(command.getFromBankName())
+                .toBankAccountNumber(command.getToBankAccountNumber())
+                .toBankName(command.getToBankName())
+                .moneyAmount(command.getMoneyAmount())
+                .build();
+
+        commandGateway.send(axonCommand)
+                .whenComplete(
+                        (result, throwable) -> {
+
+                            if(throwable != null){
+                                throwable.printStackTrace();
+                            }else{
+                                //성공
+                                //request firm db save
+                                System.out.println("createFirmbankingRequestCommand completed. " + result);
+                            }
+
+                        }
+
+                );
+
+        //command -> event sourcing
 
     }
 }

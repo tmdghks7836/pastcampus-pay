@@ -3,8 +3,14 @@ plugins{
     id 'com.google.cloud.tools.jib' version '3.1.2'
 }
 
+
+ext{
+    axonVersion = "4.6.0"
+}
+
 group = 'com.fastcampuspay.banking'
 version = '1.0.6'
+
 
 dependencies {
     compileOnly 'org.projectlombok:lombok'
@@ -32,6 +38,10 @@ dependencies {
 
     /** common module */
     implementation project(':common')
+
+    /** axon framework */
+    implementation group: 'org.axonframework', name: 'axon-configuration', version: "$axonVersion"
+    implementation group: 'org.axonframework', name: 'axon-spring-boot-starter', version: "$axonVersion"
 }
 
 

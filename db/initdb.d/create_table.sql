@@ -1,6 +1,6 @@
 CREATE DATABASE IF NOT EXISTS fastcampus_pay;
-CREATE DATABASE IF NOT EXISTS spring_batch;
-USE spring_batch;
+-- CREATE DATABASE IF NOT EXISTS spring_batch;
+USE fastcampus_pay;
 /*
 -- for Axon Framework (for Mismatching of Axon and Mysql)
 create table IF NOT EXISTS dead_letter_entry (

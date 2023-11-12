@@ -18,7 +18,7 @@ import java.util.Collections;
 import java.util.Properties;
 import java.util.concurrent.CountDownLatch;
 
-@Component
+//@Component
 public class RechargingMoneyResultConsumer {
 
     private final KafkaConsumer<String, String> consumer;

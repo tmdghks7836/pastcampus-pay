@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Properties;
 
-@Component
+//@Component
 public class TaskProducer implements SendRechargingMoneyTaskPort {
 
     private final KafkaProducer<String, String> producer;

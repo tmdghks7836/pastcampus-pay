@@ -2,8 +2,8 @@ package com.fastcampuspay.money.application.port.out;
 
 import com.fastcampuspay.money.adapter.out.persistence.MemberMoneyJpaEntity;
 import com.fastcampuspay.money.adapter.out.persistence.MoneyChangingRequestJpaEntity;
-import com.fastcampuspay.money.domain.MemberMoney;
-import com.fastcampuspay.money.domain.MoneyChangingRequest;
+import com.fastcampuspay.money.domain.membermoney.MemberMoney;
+import com.fastcampuspay.money.domain.moneychanging.MoneyChangingRequest;
 
 public interface IncreaseMoneyPort {
 

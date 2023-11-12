@@ -1,5 +1,60 @@
 version: '3'
 services:
+
+  axon-server:
+    container_name: axon-server
+    image: axoniq/axonserver:4.6.3-jdk-11-dev
+    networks:
+      - fastcampuspay_network
+    ports:
+      - "8024:8024"
+      - "8124:8124"
+    volumes:
+      - axonserver-data:/axonserver/data
+      - axonserver-events:/axonserver/events
+      - axonserver-config:/axonserver/config:ro
+
+  mysql:
+    image: mysql:8.0
+    networks:
+      - fastcampuspay_network
+    volumes:
+      - ./db/conf.d:/etc/mysql/conf.d
+      - ./db/data:/var/lib/mysql
+      - ./db/initdb.d:/docker-entrypoint-initdb.d
+    env_file:
+      - .env
+    ports:
+      - "3306:3306"
+    environment:
+      - TZ=Asia/Seoul
+      - MYSQL_ROOT_PASSWORD=rootpassword
+      - MYSQL_USER=mysqluser
+      - MYSQL_PASSWORD=mysqlpw
+
+  logging-consumer:
+    image: myfastcampuspay-logging-consumer:0.0.1
+    networks:
+      - fastcampuspay_network
+    depends_on:
+      - kafka
+      - zookeeper
+    environment:
+      - KAFKA_CLUSTERS_BOOTSTRAPSERVERS=kafka:29092
+      - LOGGING_TOPIC=fastcampus.logging.out.stdout
+
+  task-consumer:
+    image: myfastcampuspay-task-consumer:0.0.1
+    networks:
+      - fastcampuspay_network
+    depends_on:
+      - kafka
+      - zookeeper
+    environment:
+      - KAFKA_CLUSTERS_BOOTSTRAPSERVERS=kafka:29092
+      - TASK_TOPIC=fastcampus.task.topic
+      - TASK_RESULT_TOPIC=fastcampus.task.result.topic
+
   zookeeper:
     image: 'bitnami/zookeeper:latest'
     networks:
@@ -28,6 +83,7 @@ services:
       - KAFKA_CFG_ADVERTISED_LISTENERS=LC://kafka:29092,LX://${DOCKER_HOST_IP:-localhost}:9092
       - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=LC:PLAINTEXT,LX:PLAINTEXT,PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT
       - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=LC
+      - OKER_LISTENER_NAME=LC
       - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
     depends_on:
       - zookeeper
@@ -47,23 +103,6 @@ services:
       - KAFKA_CLUSTERS_0_NAME=local
       - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka:29092
       - KAFKA_CLUSTERS_0_ZOOKEEPER=zookeeper:2181
-  mysql:
-    image: mysql:8.0
-    networks:
-      - fastcampuspay_network
-    volumes:
-      - ./db/conf.d:/etc/mysql/conf.d
-      - ./db/data:/var/lib/mysql
-      - ./db/initdb.d:/docker-entrypoint-initdb.d
-    env_file:
-      - .env
-    ports:
-      - "3306:3306"
-    environment:
-      - TZ=Asia/Seoul
-      - MYSQL_ROOT_PASSWORD=rootpassword
-      - MYSQL_USER=mysqluser
-      - MYSQL_PASSWORD=mysqlpw
 
 
 
@@ -89,6 +128,7 @@ services:
       - KAFKA_CLUSTERS_BOOTSTRAPSERVERS=kafka:29092
       - LOGGING_TOPIC=fastcampus.logging.out.stdout
 
+
   banking-service:
     image: myfastcampuspay-banking-service:1.0.6
     networks:
@@ -98,10 +138,10 @@ services:
     depends_on:
       - mysql
     environment:
-      #      - AXON_AXONSERVER_SERVERS=axon-server:8124
-      #      - AXON_SERIALIZER_EVENTS=jackson
-      #      - AXON_SERIALIZER_MESSAGES=jackson
-      #      - AXON_SERIALIZER_GENERAL=xstream
+      - AXON_AXONSERVER_SERVERS=axon-server:8124
+      - AXON_SERIALIZER_EVENTS=jackson
+      - AXON_SERIALIZER_MESSAGES=jackson
+      - AXON_SERIALIZER_GENERAL=xstream
       - SPRING_DATASOURCE_DRIVER_CLASS_NAME=com.mysql.jdbc.Driver
       - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/fastcampus_pay?useSSL=false&allowPublicKeyRetrieval=true
       - SPRING_DATASOURCE_USERNAME=mysqluser
@@ -121,10 +161,10 @@ services:
     depends_on:
       - mysql
     environment:
-      #      - AXON_AXONSERVER_SERVERS=axon-server:8124
-      #      - AXON_SERIALIZER_EVENTS=jackson
-      #      - AXON_SERIALIZER_MESSAGES=jackson
-      #      - AXON_SERIALIZER_GENERAL=xstream
+      - AXON_AXONSERVER_SERVERS=axon-server:8124
+      - AXON_SERIALIZER_EVENTS=jackson
+      - AXON_SERIALIZER_MESSAGES=jackson
+      - AXON_SERIALIZER_GENERAL=xstream
       - SPRING_DATASOURCE_DRIVER_CLASS_NAME=com.mysql.jdbc.Driver
       - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/fastcampus_pay?useSSL=false&allowPublicKeyRetrieval=true
       - SPRING_DATASOURCE_USERNAME=mysqluser
@@ -136,29 +176,58 @@ services:
       - TASK_TOPIC=fastcampus.task.topic
       - TASK_RESULT_TOPIC=fastcampus.task.result.topic
       - SERVICE_MEMBERSHIP_URL=http://membership-service:8080
+      - LOGGING_LEVEL_COM_FASTCAMPUSPAY_MONEY=DEBUG
 
-  logging-consumer:
-    image: myfastcampuspay-logging-consumer:0.0.1
-    networks:
-      - fastcampuspay_network
-    depends_on:
-      - kafka
-      - zookeeper
-    environment:
-      - KAFKA_CLUSTERS_BOOTSTRAPSERVERS=kafka:29092
-      - LOGGING_TOPIC=fastcampus.logging.out.stdout
+#  remittance-service:
+#    image: myfastcampuspay-remittance-service:0.0.1
+#    networks:
+#      - fastcampuspay_network
+#    ports:
+#      - "8084:8080"
+#    depends_on:
+#      - mysql
+#    environment:
+#      #      - AXON_AXONSERVER_SERVERS=axon-server:8124
+#      #      - AXON_SERIALIZER_EVENTS=jackson
+#      #      - AXON_SERIALIZER_MESSAGES=jackson
+#      #      - AXON_SERIALIZER_GENERAL=xstream
+#      - SPRING_DATASOURCE_DRIVER_CLASS_NAME=com.mysql.jdbc.Driver
+#      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/fastcampus_pay?useSSL=false&allowPublicKeyRetrieval=true
+#      - SPRING_DATASOURCE_USERNAME=mysqluser
+#      - SPRING_DATASOURCE_PASSWORD=mysqlpw
+#      - SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT=org.hibernate.dialect.MySQL5InnoDBDialect
+#      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+#      - KAFKA_CLUSTERS_BOOTSTRAPSERVERS=kafka:29092
+#      - LOGGING_TOPIC=fastcampus.logging.out.stdout
+#      - TASK_TOPIC=fastcampus.task.topic
+#      - TASK_RESULT_TOPIC=fastcampus.task.result.topic
+#      - SERVICE_MEMBERSHIP_URL=http://membership-service:8080
+#      - SERVICE_BANKING_URL=http://banking-service:8080
+#      - SERVICE_MONEY_URL=http://money-service:8080
 
-  task-consumer:
-    image: myfastcampuspay-task-consumer:0.0.1
-    networks:
-      - fastcampuspay_network
-    depends_on:
-      - kafka
-      - zookeeper
-    environment:
-      - KAFKA_CLUSTERS_BOOTSTRAPSERVERS=kafka:29092
-      - TASK_TOPIC=fastcampus.task.topic
-      - TASK_RESULT_TOPIC=fastcampus.task.result.topic
+
+volumes:
+  axonserver-data:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: ./axon-server-se/data
+
+  axonserver-events:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: ./axon-server-se/events
+
+  axonserver-config:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: ./axon-server-se/config
+#      device: ${PWD}/axon-server-se/config
 
 
 

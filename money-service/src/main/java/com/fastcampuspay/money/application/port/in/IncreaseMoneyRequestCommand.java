@@ -1,9 +1,8 @@
 package com.fastcampuspay.money.application.port.in;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 import com.fastcampuspay.common.SelfValidating;
+import org.axonframework.modelling.command.TargetAggregateIdentifier;
 
 import javax.validation.constraints.NotNull;
 
@@ -14,21 +13,20 @@ import javax.validation.constraints.NotNull;
  * 인바운드 포트 - 내부 영역 사용을 위해 노출된 API
  * 아웃바운드 포트 - 내부 영역이 외부 영역을 사용하기 위한 API
  * */
-@Builder
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class IncreaseMoneyRequestCommand extends SelfValidating<IncreaseMoneyRequestCommand> {
 
     @NotNull
-    private String targetMembershipId;
+    private String membershipId;
 
     @NotNull
     private int amount;
 
     public IncreaseMoneyRequestCommand(String targetMembershipId, int amount) {
-        this.targetMembershipId = targetMembershipId;
+        this.membershipId = targetMembershipId;
         this.amount = amount;
 
-        this.validateSelf();
+        validateSelf();
     }
 }

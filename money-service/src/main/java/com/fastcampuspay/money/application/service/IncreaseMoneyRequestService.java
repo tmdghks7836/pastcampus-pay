@@ -1,43 +1,50 @@
 package com.fastcampuspay.money.application.service;
 
-import com.fastcampuspay.common.CountDownLatchManager;
 import com.fastcampuspay.common.RechargingMoneyTask;
 import com.fastcampuspay.common.SubTask;
+import com.fastcampuspay.money.application.port.in.IncreaseMemberMoneyCommand;
 import com.fastcampuspay.money.adapter.out.persistence.MemberMoneyJpaEntity;
 import com.fastcampuspay.money.adapter.out.persistence.MoneyChangingRequestMapper;
+import com.fastcampuspay.money.application.port.in.IncreaseMoneyRequestByMembershipIdCommand;
 import com.fastcampuspay.money.application.port.in.IncreaseMoneyRequestCommand;
 import com.fastcampuspay.money.application.port.in.IncreaseMoneyRequestUseCase;
-import com.fastcampuspay.money.application.port.out.GetMembershipPort;
+import com.fastcampuspay.money.application.port.out.GetMemberMoneyPort;
 import com.fastcampuspay.money.application.port.out.IncreaseMoneyPort;
-import com.fastcampuspay.money.application.port.out.SendRechargingMoneyTaskPort;
-import com.fastcampuspay.money.domain.MemberMoney;
-import com.fastcampuspay.money.domain.MoneyChangingRequest;
+import com.fastcampuspay.money.domain.membermoney.MemberMoney;
+import com.fastcampuspay.money.domain.moneychanging.MoneyChangingRequest;
 import lombok.RequiredArgsConstructor;
 import com.fastcampuspay.common.UseCase;
+import lombok.extern.slf4j.Slf4j;
+import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 @UseCase
 @RequiredArgsConstructor
 @Transactional
 public class IncreaseMoneyRequestService implements IncreaseMoneyRequestUseCase {
 
 
-    private final GetMembershipPort membershipPort;
+  //  private final GetMembershipPort membershipPort;
     private final IncreaseMoneyPort increaseMoneyPort;
+    private final GetMemberMoneyPort getMemberMoneyPort;
     private final MoneyChangingRequestMapper mapper;
-    private final SendRechargingMoneyTaskPort sendRechargingMoneyTaskPort;
-    private final CountDownLatchManager countDownLatchManager;
+//    private final SendRechargingMoneyTaskPort sendRechargingMoneyTaskPort;
+  //  private final CountDownLatchManager countDownLatchManager;
+    private final CommandGateway commandGateway;
+
+
 
     @Override
     public MoneyChangingRequest increaseMoneyRequest(IncreaseMoneyRequestCommand command) {
 
         //충전 증액이라는 과정
         //  1. 고객 정보가 정상인지 확인 (멤버)
-        membershipPort.getMembership(command.getTargetMembershipId());
+     //   membershipPort.getMembership(command.getTargetMembershipId());
 
 
         //  2. 고객의 연동된 계좌가 있는지, 그리고 정상적인지 확인 (뱅킹)
@@ -50,13 +57,13 @@ public class IncreaseMoneyRequestService implements IncreaseMoneyRequestUseCase 
 
         //  6-1. 결과가 정상적이라면 성공으로 MoneyChangingRequest 상태값을 변동 후에 리턴
         MemberMoneyJpaEntity memberMoneyJpaEntity = increaseMoneyPort.increaseMoney(
-                new MemberMoney.MembershipId(command.getTargetMembershipId()),
+                new MemberMoney.MembershipId(command.getMembershipId()),
                 command.getAmount()
         );
 
         //  6-2. 결과가 실패라면 실패라고 MoneyChangingRequest 상태값을 변동 후에 리턴
         return mapper.mapToDomainEntity(increaseMoneyPort.createMoneyChangingRequest(
-                new MoneyChangingRequest.TargetMembershipId(command.getTargetMembershipId()),
+                new MoneyChangingRequest.TargetMembershipId(command.getMembershipId()),
                 new MoneyChangingRequest.ChangingType(1),
                 new MoneyChangingRequest.ChangingMoneyAmount(command.getAmount()),
                 new MoneyChangingRequest.ChangingMoneyStatus(1),
@@ -71,7 +78,7 @@ public class IncreaseMoneyRequestService implements IncreaseMoneyRequestUseCase 
         // subtask , task
         SubTask validMemberTask = SubTask.builder()
                 .subTaskName("validMemberTask : " + " 멤버십 유효성 검사")
-                .membershipID(command.getTargetMembershipId())
+                .membershipID(command.getMembershipId())
                 .taskType("membership")
                 .status("ready")
                 .build();
@@ -80,7 +87,7 @@ public class IncreaseMoneyRequestService implements IncreaseMoneyRequestUseCase 
         // banking account validation
         SubTask validBankingAccountTask = SubTask.builder()
                 .subTaskName("validMemberTask : " + " 뱅킹 계좌 유효성 검사")
-                .membershipID(command.getTargetMembershipId())
+                .membershipID(command.getMembershipId())
                 .taskType("banking")
                 .status("ready")
                 .build();
@@ -95,42 +102,66 @@ public class IncreaseMoneyRequestService implements IncreaseMoneyRequestUseCase 
                 .taskName("Increase Money task / 머니 충전 task")
                 .subTaskList(subTaskList)
                 .moneyAmount(command.getAmount())
-                .membershipID(command.getTargetMembershipId())
+                .membershipID(command.getMembershipId())
                 .toBankName("fastcampus")
                 .build();
         //kafka cluster produce
         //Task produce
-        sendRechargingMoneyTaskPort.sendRechargingMoneyTaskPort(task);
-        countDownLatchManager.addCountDownLatch(task.getTaskID());
+     //   sendRechargingMoneyTaskPort.sendRechargingMoneyTaskPort(task);
+      //  countDownLatchManager.addCountDownLatch(task.getTaskID());
         //wait
-        try {
+       /* try {
             countDownLatchManager.getCountDownLatch(task.getTaskID()).await();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
-        }
+        }*/
 
         //task consumer
         // 등록된 sub-task, status 모두 ok -> task 결과를 produce
 
         //task result consume
-        String result = countDownLatchManager.getDataForKey(task.getTaskID());
-
+//        String result = countDownLatchManager.getDataForKey(task.getTaskID());
+        String result = "";
         if (!result.equals("success")) return null;
 
         //consume ok, logic
         MemberMoneyJpaEntity memberMoneyJpaEntity = increaseMoneyPort.increaseMoney(
-                new MemberMoney.MembershipId(command.getTargetMembershipId()),
+                new MemberMoney.MembershipId(command.getMembershipId()),
                 command.getAmount()
         );
 
         if(memberMoneyJpaEntity == null) return null;
 
         return mapper.mapToDomainEntity(increaseMoneyPort.createMoneyChangingRequest(
-                new MoneyChangingRequest.TargetMembershipId(command.getTargetMembershipId()),
+                new MoneyChangingRequest.TargetMembershipId(command.getMembershipId()),
                 new MoneyChangingRequest.ChangingType(1),
                 new MoneyChangingRequest.ChangingMoneyAmount(command.getAmount()),
                 new MoneyChangingRequest.ChangingMoneyStatus(1),
                 new MoneyChangingRequest.Uuid(UUID.randomUUID().toString())
         ));
+    }
+
+    @Override
+    public void increaseMoneyRequestEvent(IncreaseMoneyRequestByMembershipIdCommand command) {
+
+        MemberMoneyJpaEntity entity = getMemberMoneyPort.getMemberMoney(
+                new MemberMoney.MemberMoneyId(command.getMembershipId())
+        );
+
+        // command
+        IncreaseMemberMoneyCommand axonCommand = new IncreaseMemberMoneyCommand(
+                entity.getId(),
+                command.getMembershipId(),
+                command.getAmount()
+        );
+
+        commandGateway.send(axonCommand);
+       /*
+
+        increaseMoneyPort.increaseMoney(
+                new MemberMoney.MembershipId(command.getTargetMembershipId()),
+                command.getAmount()
+        );*/
+
     }
 }

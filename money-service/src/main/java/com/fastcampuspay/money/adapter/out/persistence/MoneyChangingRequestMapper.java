@@ -1,9 +1,7 @@
 package com.fastcampuspay.money.adapter.out.persistence;
 
-import com.fastcampuspay.money.domain.MoneyChangingRequest;
+import com.fastcampuspay.money.domain.moneychanging.MoneyChangingRequest;
 import org.springframework.stereotype.Component;
-
-import java.util.UUID;
 
 @Component
 public class MoneyChangingRequestMapper {

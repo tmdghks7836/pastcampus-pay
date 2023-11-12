@@ -1,4 +1,4 @@
-package com.fastcampuspay.money.domain;
+package com.fastcampuspay.money.domain.moneychanging;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.Value;
 
 import java.util.Date;
-import java.util.UUID;
 
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)

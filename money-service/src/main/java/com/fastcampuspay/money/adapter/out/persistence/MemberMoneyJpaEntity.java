@@ -12,14 +12,14 @@ import javax.persistence.*;
 public class MemberMoneyJpaEntity {
 
     @Id
-    @GeneratedValue
-    private Long memberMoneyId;
+    private String id;
 
-    private Long membershipId;
+    private String membershipId;
 
     private int balance;
 
-    public MemberMoneyJpaEntity(Long membershipId, int balance) {
+    public MemberMoneyJpaEntity(String id, String membershipId, int balance) {
+        this.id = id;
         this.membershipId = membershipId;
         this.balance = balance;
     }

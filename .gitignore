@@ -6,6 +6,7 @@ build/
 !**/src/test/**/build/
 .github
 db
+axon-server-se
 ### STS ###
 .apt_generated
 .classpath
