@@ -17,8 +17,7 @@ import javax.persistence.Table;
 public class RegisteredBankAccountJpaEntity {
 
     @Id
-    @GeneratedValue
-    private Long registeredBankAccountId;
+    private String registeredBankAccountId;
 
     @Getter
     private String membershipId;
@@ -32,13 +31,13 @@ public class RegisteredBankAccountJpaEntity {
     @Getter
     private boolean linkedStatusIsValid;
 
-    public RegisteredBankAccountJpaEntity(String membershipId, String bankName, String bankAccountNumber, boolean linkedStatusIsValid) {
+    public RegisteredBankAccountJpaEntity(String registeredBankAccountId, String membershipId, String bankName, String bankAccountNumber, boolean linkedStatusIsValid) {
+        this.registeredBankAccountId = registeredBankAccountId;
         this.membershipId = membershipId;
         this.bankName = bankName;
         this.bankAccountNumber = bankAccountNumber;
         this.linkedStatusIsValid = linkedStatusIsValid;
     }
-
 
     @Override
     public String toString() {

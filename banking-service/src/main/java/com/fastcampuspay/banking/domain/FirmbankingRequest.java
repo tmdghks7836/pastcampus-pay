@@ -35,7 +35,6 @@ public class FirmbankingRequest {
     @Getter
     private final UUID uuid;
 
-
     public static FirmbankingRequest generate(RequestedFirmbankingId requestedFirmbankingId,
                                               FromBankName fromBankName,
                                               FromBankAccountNumber fromBankAccountNumber,
@@ -125,5 +124,15 @@ public class FirmbankingRequest {
         }
 
         int value;
+    }
+
+    @Value
+    public static class AggregateIdentifier {
+
+        public AggregateIdentifier(String value) {
+            this.value = value;
+        }
+
+        String value;
     }
 }

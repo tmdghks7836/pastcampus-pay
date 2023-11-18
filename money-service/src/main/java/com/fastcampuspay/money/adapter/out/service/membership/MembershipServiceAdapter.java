@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-//@Component
+@Component
 public class MembershipServiceAdapter implements GetMembershipPort {
 
     private final CommonHttpClient commonHttpClient;

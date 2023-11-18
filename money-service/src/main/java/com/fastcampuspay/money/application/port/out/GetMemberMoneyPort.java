@@ -8,5 +8,6 @@ import com.fastcampuspay.money.domain.membermoney.MemberMoney;
 
 public interface GetMemberMoneyPort {
 
-    MemberMoneyJpaEntity getMemberMoney (MemberMoney.MemberMoneyId memberMoneyId);
+    MemberMoneyJpaEntity getMemberMoney (MemberMoney.MembershipId memberMoneyId);
+
 }

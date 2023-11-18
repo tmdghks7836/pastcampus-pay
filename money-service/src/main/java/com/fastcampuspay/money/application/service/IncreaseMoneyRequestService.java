@@ -2,12 +2,9 @@ package com.fastcampuspay.money.application.service;
 
 import com.fastcampuspay.common.RechargingMoneyTask;
 import com.fastcampuspay.common.SubTask;
-import com.fastcampuspay.money.application.port.in.IncreaseMemberMoneyCommand;
+import com.fastcampuspay.money.application.port.in.*;
 import com.fastcampuspay.money.adapter.out.persistence.MemberMoneyJpaEntity;
 import com.fastcampuspay.money.adapter.out.persistence.MoneyChangingRequestMapper;
-import com.fastcampuspay.money.application.port.in.IncreaseMoneyRequestByMembershipIdCommand;
-import com.fastcampuspay.money.application.port.in.IncreaseMoneyRequestCommand;
-import com.fastcampuspay.money.application.port.in.IncreaseMoneyRequestUseCase;
 import com.fastcampuspay.money.application.port.out.GetMemberMoneyPort;
 import com.fastcampuspay.money.application.port.out.IncreaseMoneyPort;
 import com.fastcampuspay.money.domain.membermoney.MemberMoney;
@@ -145,17 +142,28 @@ public class IncreaseMoneyRequestService implements IncreaseMoneyRequestUseCase 
     public void increaseMoneyRequestEvent(IncreaseMoneyRequestByMembershipIdCommand command) {
 
         MemberMoneyJpaEntity entity = getMemberMoneyPort.getMemberMoney(
-                new MemberMoney.MemberMoneyId(command.getMembershipId())
+                new MemberMoney.MembershipId(command.getMembershipId())
         );
 
-        // command
-        IncreaseMemberMoneyCommand axonCommand = new IncreaseMemberMoneyCommand(
+        //Saga의 시작을 알리는 커민드
+        //RechargingMoneyRequestCreateCommand
+        commandGateway.send(new RechargingMoneyRequestCreateCommand(
                 entity.getId(),
+                UUID.randomUUID().toString(),
                 command.getMembershipId(),
-                command.getAmount()
-        );
+                command.getAmount())
+        ).whenComplete(
+                (result, throwable) -> {
 
-        commandGateway.send(axonCommand);
+                    if(throwable != null){
+                        throwable.printStackTrace();
+                    }else{
+                        //성공
+                        //request firm db save
+                        System.out.println("result = " + result);
+                    }
+                }
+        );
        /*
 
         increaseMoneyPort.increaseMoney(

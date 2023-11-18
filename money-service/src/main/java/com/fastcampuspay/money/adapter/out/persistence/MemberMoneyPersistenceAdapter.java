@@ -14,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
+import java.util.Optional;
 
 @Transactional
 @PersistenceAdapter
@@ -28,12 +29,16 @@ public class MemberMoneyPersistenceAdapter implements IncreaseMoneyPort, CreateM
     @Override
     public MemberMoneyJpaEntity increaseMoney(MemberMoney.MembershipId membershipId, int increaseMoneyAmount) {
 
-        MemberMoneyJpaEntity memberMoneyJpaEntity = memberMoneyRepository
-                .findFirstByMembershipId(membershipId.getValue()).get();
+        Optional<MemberMoneyJpaEntity> memberMoneyJpaEntity = memberMoneyRepository
+                .findFirstByMembershipId(membershipId.getValue());
 
-        memberMoneyJpaEntity.increaseMoney(increaseMoneyAmount);
+        if (memberMoneyJpaEntity.isPresent()) {
 
-        return memberMoneyJpaEntity;
+            memberMoneyJpaEntity.get().increaseMoney(increaseMoneyAmount);
+        }
+
+
+        return memberMoneyJpaEntity.orElse(null);
     }
 
     @Override
@@ -52,6 +57,7 @@ public class MemberMoneyPersistenceAdapter implements IncreaseMoneyPort, CreateM
                 uuid.getValue()
         ));
     }
+
 
     @EventHandler
     public void on(MemberMoneyCreatedEvent memberMoneyCreatedEvent) {
@@ -76,9 +82,10 @@ public class MemberMoneyPersistenceAdapter implements IncreaseMoneyPort, CreateM
 
 
     @Override
-    public MemberMoneyJpaEntity getMemberMoney(MemberMoney.MemberMoneyId memberMoneyId) {
+    public MemberMoneyJpaEntity getMemberMoney(MemberMoney.MembershipId memberMoneyId) {
 
         return memberMoneyRepository.findFirstByMembershipId(memberMoneyId.getValue())
                 .orElseThrow(() -> new RuntimeException("not found MemberMoney memberMoneyId : " + memberMoneyId.getValue()));
     }
+
 }

@@ -13,14 +13,13 @@ public class FirmbankingRequestMapper {
 
         return FirmbankingRequest.generate(
                 new FirmbankingRequest.RequestedFirmbankingId(
-                        entity.getRequestedFirmbankingId() + ""),
+                        entity.getRequestedFirmbankingId()),
                 new FirmbankingRequest.FromBankName(entity.getFromBankName()),
                 new FirmbankingRequest.FromBankAccountNumber(entity.getFromBankAccountNumber()),
                 new FirmbankingRequest.ToBankName(entity.getToBankName()),
                 new FirmbankingRequest.ToBankAccountNumber(entity.getToBankAccountNumber()),
                 new FirmbankingRequest.MoneyAmount(entity.getMoneyAmount()),
                 new FirmbankingRequest.FirmbankingStatus(entity.getFirmbankingStatus()),
-                uuid
-        );
+                uuid);
     }
 }

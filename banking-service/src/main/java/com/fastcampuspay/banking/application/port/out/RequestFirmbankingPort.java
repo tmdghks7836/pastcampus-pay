@@ -7,13 +7,16 @@ import com.fastcampuspay.banking.domain.FirmbankingRequest;
 
 public interface RequestFirmbankingPort {
 
-    FirmbankingRequestJpaEntity create(
+    FirmbankingRequestJpaEntity createFirmbankingRequest(
             FirmbankingRequest.FromBankName fromBankName,
             FirmbankingRequest.FromBankAccountNumber fromBankAccountNumber,
             FirmbankingRequest.ToBankName toBankName,
             FirmbankingRequest.ToBankAccountNumber toBankAccountNumber,
             FirmbankingRequest.MoneyAmount moneyAmount,
-            FirmbankingRequest.FirmbankingStatus firmbankingStatus);
+            FirmbankingRequest.FirmbankingStatus firmbankingStatus,
+            FirmbankingRequest.AggregateIdentifier aggregateIdentifier);
 
     FirmbankingRequestJpaEntity modify(FirmbankingRequestJpaEntity entity);
+
+    FirmbankingRequestJpaEntity getFirmbankingRequest(FirmbankingRequest.AggregateIdentifier aggregateIdentifier);
 }

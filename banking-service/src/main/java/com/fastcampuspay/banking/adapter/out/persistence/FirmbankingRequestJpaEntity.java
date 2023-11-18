@@ -17,8 +17,7 @@ import java.util.UUID;
 public class FirmbankingRequestJpaEntity {
 
     @Id
-    @GeneratedValue
-    private Long requestedFirmbankingId;
+    private String requestedFirmbankingId;
 
     private String fromBankName;
 
@@ -34,7 +33,15 @@ public class FirmbankingRequestJpaEntity {
 
     private String uuid;
 
-    public FirmbankingRequestJpaEntity(String fromBankName, String fromBankAccountNumber, String toBankName, String toBankAccountNumber, Integer moneyAmount, Integer firmbankingStatus, UUID uuid) {
+    public FirmbankingRequestJpaEntity(String  requestedFirmbankingId,
+                                       String fromBankName,
+                                       String fromBankAccountNumber,
+                                       String toBankName,
+                                       String toBankAccountNumber,
+                                       Integer moneyAmount,
+                                       Integer firmbankingStatus,
+                                       UUID uuid) {
+        this.requestedFirmbankingId = requestedFirmbankingId;
         this.fromBankName = fromBankName;
         this.fromBankAccountNumber = fromBankAccountNumber;
         this.toBankName = toBankName;
