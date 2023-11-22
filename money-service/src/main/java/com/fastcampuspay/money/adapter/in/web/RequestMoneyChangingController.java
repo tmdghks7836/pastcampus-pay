@@ -25,7 +25,7 @@ public class RequestMoneyChangingController {
         // request -> command
         //Usecase
         IncreaseMoneyRequestCommand command = new IncreaseMoneyRequestCommand(
-               request.getTargetMembershipId(),
+               request.getMembershipId(),
 
                 request.getAmount());
 
@@ -66,7 +66,7 @@ public class RequestMoneyChangingController {
     @PostMapping("/money/create-member-money")
     void createMemberMoney(@RequestBody CreateMemberMoneyRequest request) {
 
-        CreateMemberMoneyCommand command = new CreateMemberMoneyCommand(request.getTargetMembershipId());
+        CreateMemberMoneyCommand command = new CreateMemberMoneyCommand(request.getMembershipId());
 
         createMemberMoneyUseCase.createMemberMoney(command);
     }
@@ -75,8 +75,18 @@ public class RequestMoneyChangingController {
     void increaseMemberMoney(@RequestBody IncreaseMoneyChangingRequest request) {
 
         IncreaseMoneyRequestByMembershipIdCommand command = new IncreaseMoneyRequestByMembershipIdCommand(
-                request.getTargetMembershipId(),
+                request.getMembershipId(),
                 request.getAmount());
+
+        increaseMoneyRequestUseCase.increaseMoneyRequestEvent(command);
+    }
+
+    @PostMapping("/money/decrease-eda")
+    void decreaseMemberMoney(@RequestBody IncreaseMoneyChangingRequest request) {
+
+        IncreaseMoneyRequestByMembershipIdCommand command = new IncreaseMoneyRequestByMembershipIdCommand(
+                request.getMembershipId(),
+                request.getAmount() * -1);
 
         increaseMoneyRequestUseCase.increaseMoneyRequestEvent(command);
     }

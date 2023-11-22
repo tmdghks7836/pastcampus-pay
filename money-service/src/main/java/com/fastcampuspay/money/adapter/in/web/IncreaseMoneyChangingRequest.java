@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class IncreaseMoneyChangingRequest {
 
-    private String targetMembershipId;
+    private String membershipId;
 
     private int amount;
 

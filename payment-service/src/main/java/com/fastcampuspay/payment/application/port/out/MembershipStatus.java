@@ -1,4 +1,4 @@
-package com.fastcampuspay.money.adapter.in.web;
+package com.fastcampuspay.payment.application.port.out;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,8 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateMemberMoneyRequest {
+public class MembershipStatus {
 
     private String membershipId;
 
+    private boolean isValid;
 }
