@@ -14,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Optional;
 
 @Transactional
@@ -86,6 +87,12 @@ public class MemberMoneyPersistenceAdapter implements IncreaseMoneyPort, CreateM
 
         return memberMoneyRepository.findFirstByMembershipId(memberMoneyId.getValue())
                 .orElseThrow(() -> new RuntimeException("not found MemberMoney memberMoneyId : " + memberMoneyId.getValue()));
+    }
+
+    @Override
+    public List<MemberMoneyJpaEntity> getMemberMoneyListByMembershipIds(List<String> membershipIds) {
+
+        return memberMoneyRepository.findAllByMembershipIdIn(membershipIds);
     }
 
 }

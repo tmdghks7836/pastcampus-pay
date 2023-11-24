@@ -6,8 +6,12 @@ package com.fastcampuspay.money.application.port.out;
 import com.fastcampuspay.money.adapter.out.persistence.MemberMoneyJpaEntity;
 import com.fastcampuspay.money.domain.membermoney.MemberMoney;
 
+import java.util.List;
+
 public interface GetMemberMoneyPort {
 
     MemberMoneyJpaEntity getMemberMoney (MemberMoney.MembershipId memberMoneyId);
+
+    List<MemberMoneyJpaEntity> getMemberMoneyListByMembershipIds (List<String> membershipIds);
 
 }

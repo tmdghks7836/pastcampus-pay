@@ -4,6 +4,7 @@ import com.fastcampuspay.money.application.port.in.*;
 import com.fastcampuspay.money.domain.moneychanging.MoneyChangingRequest;
 import lombok.RequiredArgsConstructor;
 import com.fastcampuspay.common.WebAdapter;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -90,5 +91,4 @@ public class RequestMoneyChangingController {
 
         increaseMoneyRequestUseCase.increaseMoneyRequestEvent(command);
     }
-
 }

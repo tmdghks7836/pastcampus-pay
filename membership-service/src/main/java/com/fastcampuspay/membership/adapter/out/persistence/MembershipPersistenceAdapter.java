@@ -7,6 +7,8 @@ import com.fastcampuspay.membership.domain.Membership;
 import lombok.RequiredArgsConstructor;
 import com.fastcampuspay.common.PersistenceAdapter;
 
+import java.util.List;
+
 @PersistenceAdapter
 @RequiredArgsConstructor
 public class MembershipPersistenceAdapter implements RegisterMembershipPort, FindMembershipPort, ModifyMembershipPort {
@@ -30,6 +32,14 @@ public class MembershipPersistenceAdapter implements RegisterMembershipPort, Fin
     @Override
     public MemberShipJpaEntity findMembership(Membership.MembershipId membershipId) {
         return membershipRepository.getById(Long.parseLong(membershipId.getMembershipId()));
+    }
+
+    @Override
+    public List<MemberShipJpaEntity> findMembershipListByAddress(Membership.MembershipAddress membershipAddress) {
+
+        String addressValue = membershipAddress.getAddressValue();
+
+        return membershipRepository.findAllByAddress(addressValue);
     }
 
     @Override

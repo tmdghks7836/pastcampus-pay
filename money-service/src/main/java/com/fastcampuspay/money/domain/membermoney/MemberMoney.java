@@ -5,22 +5,21 @@ import com.fastcampuspay.money.application.port.in.IncreaseMemberMoneyCommand;
 import com.fastcampuspay.money.application.port.in.RechargingMoneyRequestCreateCommand;
 import com.fastcampuspay.money.application.port.out.GetRegisteredBankAccountPort;
 import com.fastcampuspay.money.application.port.out.RegisteredBankAccountId;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.Value;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.modelling.command.AggregateIdentifier;
 import org.axonframework.spring.stereotype.Aggregate;
 
+import java.lang.reflect.Member;
 import java.util.UUID;
 
 import static org.axonframework.modelling.command.AggregateLifecycle.apply;
 
 
 @Slf4j
+@Getter
 @Aggregate
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -32,6 +31,12 @@ public class MemberMoney {
     private String membershipId;
 
     private int balance;
+
+
+    public static MemberMoney generate(String id, String membershipId, int balance) {
+
+        return new MemberMoney(id, membershipId, balance);
+    }
 
     @CommandHandler
     public MemberMoney(CreateMemberMoneyCommand command) {

@@ -47,9 +47,9 @@ public class DummyDataGenerator {
 
         PreparedStatement pstmt = conn.prepareStatement(insertQuery);
 
-        int numberOfDummyData = 1000;
+        int numberOfDummyData = 9000;
 
-        for (int i = 0; i < numberOfDummyData; i++) {
+        for (int i = 1000; i < numberOfDummyData + 1000; i++) {
 
             pstmt.setLong(1, i);
             pstmt.setString(2, ADDRESSES[random.nextInt(ADDRESSES.length)   ]);
